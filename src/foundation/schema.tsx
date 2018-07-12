@@ -14,6 +14,9 @@ import recruitment from './schema/recruitment'
 import relation from './schema/relation'
 import resume from './schema/resume'
 import team from './schema/team'
+import imgs from './schema/imgs';
+import imgList from './schema/imgList';
+
 
 export default {
         account,
@@ -31,5 +34,7 @@ export default {
         recruitment,
         relation,
         resume,
-        team
+        team,
+        imgs,
+        imgList
 }

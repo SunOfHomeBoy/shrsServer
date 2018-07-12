@@ -10,11 +10,15 @@ import { purview } from '../foundation'
 import addArticle from './article/addArticle';
 import searchArticle from './article/searchArticle';
 
-import imgUpload from './imgUpload/upload';
+import imgUpload from './imgUpload/upload'
+import addImg from './imgUpload/addImg'
+import addImgList from './imgUpload/addImgList'
+import searchImg from './imgUpload/searchImg'
+import searchImgList from './imgUpload/searchImgList'
 
 
 export default [
-        // 文章接口
+        // 文章接口:
         {
                 path: '/api/article/addArticle',
                 component: addArticle,
@@ -26,21 +30,21 @@ export default [
                 auth: purview.API_PURVIEW_ADMINS
         }, // 搜索 文章
 
-        // 图片上传
+        // 图片上传:
         {
                 path: '/service/upload/imgUpload',
                 component: imgUpload,
                 auth: purview.API_PURVIEW_ADMINS || purview.API_PURVIEW_COMMON || purview.API_PURVIEW_MEMBER
         },
         {
-                path: '/service/service/upload',
-                component: imgUpload,
-                auth: purview.API_PURVIEW_ADMINS
+                path: '/service/service/addImg',
+                component: addImg,
+                auth: purview.API_PURVIEW_ADMINS || purview.API_PURVIEW_COMMON || purview.API_PURVIEW_MEMBER
         },
         {
-                path: '/service/service/upload111',
-                component: imgUpload,
-                auth: purview.API_PURVIEW_ADMINS
+                path: '/service/service/addImgList',
+                component: addImgList,
+                auth: purview.API_PURVIEW_ADMINS || purview.API_PURVIEW_COMMON || purview.API_PURVIEW_MEMBER
         },
 
         // 用户收藏类接口

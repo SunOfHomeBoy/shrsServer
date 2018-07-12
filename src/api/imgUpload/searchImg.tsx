@@ -2,15 +2,15 @@
 // Use of this source that is governed by a Apache-style
 // license that can be found in the LICENSE file.
 //
-// 定义跨设备服务器端接口 之 搜索新闻文章列表
+// 定义跨设备服务器端接口 之 搜索图片
 //
 // 调用权限: API_PURVIEW_COMMON | API_PURVIEW_MEMBER | API_PURVIEW_ADMINS <Passing/>
 //
 // 参数说明:
 //      {
-//              "articleLang": "cn", // 语言版本 String 非空 其中：cn表示简体中文 zh表示繁体中文 en表示英语
-//              "articlePublish": 0, // 发布时间 Number 可空 其中：0表示全部 1表示今天发布 3表示最近三天 7表示最近七天 15表示最近半月 30表示最近一月
-//              "articleType": "xxx", // 文章分类 String 可空
+//              "Publish": 0, // 发布时间 Number 可空 其中：0表示全部 1表示今天发布 3表示最近三天 7表示最近七天 15表示最近半月 30表示最近一月
+//              "imgMode": 1 || 2, // 图片模型 可空 默认值：1 其中：1表示荣誉证书 2表示团队风采
+//              "imgItem": "imgItemName", // 图片模型下子类型 可空 默认值：空字符串
 //              "begin": 1, // 分页页码 Number 可空 默认值：1
 //              "limit": 10, // 每页极限 Number 可空 默认值：10
 //      }
@@ -25,8 +25,8 @@
 //                      "begin": 1,  // 分页页码 Number 非空
 //                      "limit": 10, // 每页极限 Number 非空
 //                      "items": [{
-//                              "articleID": "20171102759933", // 文章全局ID String 非空
-//                              "articleType": "xxx", // 文章分类 String 非空
+//                              "ImgID": "20171102759933", // 文章全局ID String 非空
+//                              "ImgType": "xxx", // 文章分类 String 非空
 //                              "title": "星期一催至有：香港打工仔就算有情緒病都唔畀得公司知", // 文章主标题 String 非空
 //                              "thumb": "http:\/\/www.xxx.com/xxx.png", // 文章缩略图 String 非空
 //                              "publish": "2018-01-20", // 发布日期 String 非空
@@ -38,30 +38,27 @@
 // @authors hjboss <hongjiangproject@gmail.com> 2018-01 $$
 import { request, response, IResult, render, utils, schema } from '../../foundation'
 
-export default async function searchArticle(req: request, res: response, parameters: any): Promise<IResult> {
+export default async function searchImg(req: request, res: response, parameters: any): Promise<IResult> {
         let filter: any = {
                 where: {
-                        articleLang: parameters.articleLang || 'cn',
+                        imgMode: parameters.imgMode || 1,
+                        imgItem: parameters.imgItem || '',
                         enable: true
                 },
                 order: {
-                        articleID: -1
+                        imgID: -1
                 },
                 begin: parameters.begin || 1,
                 limit: parameters.limit || 30
         }
 
-        if (parameters.articleType) {
-                filter.where.articleType = parameters.articleType
-        }
-
-        if (parameters.articlePublish) {
+        if (parameters.imgPublish) {
                 filter.where.publish = {
-                        $gt: utils.beforeToday(parameters.articlePublish)
+                        $gt: utils.beforeToday(parameters.imgPublish)
                 }
         }
 
-        let document = await schema.article.findPage(filter)
+        let document = await schema.imgs.findPage(filter)
         document.items = utils.forEach(document.items, (e: any): any => {
                 return {
                         articleID: e.articleID,
