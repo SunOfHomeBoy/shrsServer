@@ -37,19 +37,409 @@
 
   </div>
 
-
+  <br>
+  <br>
+  <br>
+  <br> -------------------分割线-----------------------
   <div>
-    <button onclick="upArticle()">增加文章</button>
+    <button onclick="upArticle()">增加/修改 文章</button>
   </div>
+  <div>
+    <button onclick="delArticle()">删除 文章</button>
+  </div>
+  <div>
+    <button onclick="searchArticle()">获取文章列表</button>
+  </div>
+  <div>
+    <button onclick="detArticle()">获取文章详情</button>
+  </div>
+  <div>
+    <button onclick="searchImgList()">获取图片列表</button>
+    ||
+    <button onclick="searchImg()">获取图片</button>
+  </div>
+  <div>
+    <!-- <button onclick="searchImgList()">获取图片列表</button> -->
+    ||
+    <button onclick="addImg()">增加图片</button>
+  </div>
+
+
+
+  <!-- 进度条 -->
   <progress id="progressBar" value="51" max="100">
     <div class="bugs">123123132</div>
   </progress>
+
+  <!-- 跳转上传 -->
   <form enctype='multipart/form-data' action="http://localhost:10007/api/upload/imgUpload" method="post">
     <input type="file" name="imgUpload" id="img">
     <input type="submit">
   </form>
 
-  -------------------分割线----------------------- -------------------分割线-----------------------
+  <script>
+    var val = document.getElementsByClassName('val')[0];
+    var result = document.getElementsByClassName('result')[0];
+
+    function addImg() {
+      ajax({
+        url: "http://localhost:10007/api/imgs/addImg",
+        type: "POST",
+        data: {
+          parameters: JSON.stringify({
+            imgMode: 1,
+            imgItem: "荣誉证书", // 图片模型下子类型 可空 默认值：空字符串
+            title: "医院消毒清洁资质证书", // 图片主标题 非空 默认值：空字符串
+            linkURL: 'http://i1.fuimg.com/611341/635673d18b0ad969s.jpg',
+          })
+        },
+        dataType: "json",
+        success: function (response, xml) {
+          // 此处放成功后执行的代码
+          var allData = JSON.parse(response)
+
+          console.log("allData::", allData, "\n", response);
+        },
+        fail: function (status) {
+          // 此处放失败后执行的代码
+          console.log('错误', status);
+        }
+      })
+    }
+
+    function searchImgList() {
+      ajax({
+        url: "http://localhost:10007/api/",
+        type: "POST",
+        data: {
+          parameters: JSON.stringify({
+            "imgMode": 1
+          })
+        },
+        dataType: "json",
+        success: function (response, xml) {
+          // 此处放成功后执行的代码
+          var allData = JSON.parse(response)
+          // result.innerHTML = allData.data.allMobile
+
+          console.log(allData);
+        },
+        fail: function (status) {
+          // 此处放失败后执行的代码
+          console.log('错误', status);
+        }
+      })
+    }
+
+
+    function searchArticle() {
+      ajax({
+        url: 'http://localhost:10007/api/article/delArticle',
+        type: "post",
+        data: {
+          parameters: JSON.stringify({
+            "": "",
+          })
+        }
+      })
+    }
+
+    function delArticle() {
+      ajax({
+        url: "http://localhost:10007/api/article/delArticle",
+        type: "POST",
+        data: {
+          parameters: JSON.stringify({
+            "articleID": "20180709072313",
+            "enable": false
+          })
+        },
+        dataType: "json",
+        success: function (response, xml) {
+          // 此处放成功后执行的代码
+          var allData = JSON.parse(response)
+          // result.innerHTML = allData.data.allMobile
+
+          console.log(allData);
+        },
+        fail: function (status) {
+          // 此处放失败后执行的代码
+          console.log('错误', status);
+        }
+      })
+    }
+
+    function upArticle() {
+      ajax({
+        url: "http://localhost:10007/api/article/addArticle", //请求地址
+        type: "POST", //请求方式
+        data: {
+          accessToken: '',
+          appID: '',
+          parameters: JSON.stringify({
+            "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9",
+            // "articleID": "20180626493113",
+            "title": "四海日盛保洁",
+            "subtitle": "",
+            "articleType": "公司介绍",
+            "authors": "四海日盛",
+            "linkURL": "",
+            "thumb": "http://i2.tiimg.com/611341/e15245016e259173.jpg",
+            "keywords": "保洁 简介",
+            "description": "",
+            "content": "        四海日盛保洁隶属于北京四海日盛人力资源管理有限公司座落于北京朝阳区高碑店，总投资9000万、注册资本800万,在2006年初公司为了扩大经营范围，主要接受委托提供工程劳务人员输送以及清洁服务一体化综合性服务公司，业务涉及成品保护、保洁、电梯运行、外墙清洗、石材翻新，工程开荒等行业。经过努力与探索，经营与发展，完善与提高，在所提供的服务领域内，享有较高的公司信誉，得到广泛的认同和赞许，公司在实践中摸索和总结经验，积累了一套完整的行之有效的专业管理工作经验，通过不间断的、周到的、细致的、系统性的管理，确定的一专多能、多元化、多功能的发展方向和经营目标，建立建全公司管理制度，逐渐发展成为一家专业化、纪律化、职业化、正规化的管理公司，建设一支高素质、高效益、高规格、高度责任心的员工及队伍。\n\n        公司用真诚树立良好的企业形象，以高度责任感和事业心，塑造公司信誉。周到、热情、细致的服务，得到方方面面的赞誉和肯定。我们坚信，用我们良好的素质，严格的管理，高度的责任感和事业心，一定能够保证城市建筑精品的完美无瑕。公司全体员工愿与业界同仁精诚合作，共谋发展，再铸辉煌。",
+            "orderNumber": 0,
+            "hitNumber": 0,
+            // "publish": ""
+          }),
+          /*  parameters: JSON.stringify({
+             "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9",
+             "title": "走进四海",
+             "subtitle": "",
+             "articleType": "公司介绍",
+             "authors": "四海日盛",
+             "linkURL": "",
+             "thumb": "http:\/\/www.xxx.com/xxx.png",
+             "keywords": "保洁 简介",
+             "description": "xxx-yyy",
+             "content": "xxx-xxx-...",
+             "orderNumber": 0,
+             "hitNumber": 0,
+             "publish": new Date()
+           }), */
+          timezone: '8.0'
+        }, //请求参数
+        dataType: "json",
+        success: function (response, xml) {
+          // 此处放成功后执行的代码
+          var allData = JSON.parse(response)
+          // result.innerHTML = allData.data.allMobile
+          var o = allData;
+          console.log(o);
+        },
+        fail: function (status) {
+          // 此处放失败后执行的代码
+          console.log('错误', status);
+        }
+      });
+    }
+
+    function upData() {
+      ajax({
+        url: "http://localhost:10007/api/foundation/dataHandle", //请求地址
+        type: "POST", //请求方式
+        data: {
+          accessToken: '',
+          appID: '',
+          parameters: JSON.stringify({
+            "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9", // 管理员OpenID加密字符串 String 非空
+            "data": val.innerHTML
+          }),
+          timezone: '8.0'
+        }, //请求参数
+        dataType: "json",
+        success: function (response, xml) {
+          // 此处放成功后执行的代码
+          var allData = JSON.parse(response)
+          // result.innerHTML = allData.data.allMobile
+          var o = allData;
+          console.log(o);
+          let itemType = o.data.allMobile;
+          for (let item of itemType) {
+            switch (item.typeCode) {
+              case "A":
+
+                break;
+
+              case "B":
+
+                break;
+
+              case "C":
+
+                break;
+
+              case "D":
+
+                break;
+              case "E":
+
+                break;
+
+              case "F":
+
+                break;
+
+              default:
+                break;
+            }
+          }
+        },
+        fail: function (status) {
+          // 此处放失败后执行的代码
+          console.log('错误', status);
+        }
+      });
+    }
+
+    function like() {
+      ajax({
+        url: "http://localhost:10007/api/planning/like",
+        type: "post",
+        data: {
+          parameters: JSON.stringify({
+            start: {
+              tn: 1969,
+              ty: 4,
+              tr: 5,
+              // th,
+              // tm,
+              // ts,
+              // tms
+            },
+            cur: {
+              cn: 1970,
+              cy: 1,
+              cr: 10,
+              ch: 0,
+              cm: 0,
+              cs: 0,
+              cms: 0
+            }
+          })
+        },
+        dataType: 'json',
+        success: function (req) {
+          console.log(req);
+        },
+        fail: function (status) {
+          console.log(status);
+        }
+      })
+    }
+
+    function lotto() {
+      ajax({
+        url: "http://localhost:10007/api/foundation/lotto",
+        type: "POST",
+        data: {
+          parameters: JSON.stringify({
+            openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
+            param: '我是请求参数！！！'
+          })
+        },
+        dataType: 'json',
+        success: function (res, xml) {
+          console.log("res:", res);
+          // console.log("xml:", xml);
+        },
+        fail: function (status) {
+          console.error('请求错误', status);
+        }
+      })
+    }
+
+    function lottoRule() {
+      ajax({
+        url: "http://localhost:10007/api/foundation/lottoRule",
+        type: "POST",
+        data: {
+          parameters: JSON.stringify({
+            openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
+            rule: {
+              a: 3,
+              b: 8,
+              c: 2,
+              d: 7,
+              e: 10
+            }
+          })
+        },
+        dataType: 'json',
+        success: function (res, xml) {
+          console.log("res:", res);
+          // console.log("xml:", xml);
+        },
+        fail: function (status) {
+          console.error('请求错误', status);
+        }
+      })
+    }
+
+    function lottoQuery() {
+      ajax({
+        url: "http://localhost:10007/api/foundation/lottoQuery",
+        type: "POST",
+        data: {
+          parameters: JSON.stringify({
+            openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
+            param: '我是请求参数！！！'
+          })
+        },
+        dataType: 'json',
+        success: function (res, xml) {
+          console.log("res:", res);
+          // console.log("xml:", xml);
+        },
+        fail: function (status) {
+          console.error('请求错误', status);
+        }
+      })
+    }
+
+    function ajax(options) {
+      options = options || {};
+      options.type = (options.type || "GET").toUpperCase();
+      options.dataType = options.dataType || "json";
+      var params = formatParams(options.data);
+
+      //创建 - 非IE6 - 第一步
+      if (window.XMLHttpRequest) {
+        var xhr = new XMLHttpRequest();
+      } else { //IE6及其以下版本浏览器
+        var xhr = new ActiveXObject('Microsoft.XMLHTTP');
+      }
+
+      //接收 - 第三步
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+          var status = xhr.status;
+          if (status >= 200 && status < 300) {
+            options.success && options.success(xhr.responseText, xhr.responseXML);
+          } else {
+            options.fail && options.fail(status);
+          }
+        }
+      }
+
+      //连接 和 发送 - 第二步
+      if (options.type == "GET") {
+        xhr.open("GET", options.url + "?" + params, true);
+        xhr.send(null);
+      } else if (options.type == "POST") {
+        xhr.open("POST", options.url, true);
+        //设置表单提交时的内容类型
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send(params);
+      }
+    }
+    // 格式化参数
+    function formatParams(data) {
+      var arr = [];
+      for (var name in data) {
+        arr.push(encodeURIComponent(name) + "=" + encodeURIComponent(data[name]));
+      }
+      arr.push(("v=" + Math.random()).replace(".", ""));
+      console.log(arr);
+      return arr.join("&");
+    }
+  </script>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br> -------------------异步上传 分割线-----------------------
   <div>
     <h1>Sending forms with pure AJAX</h1>
 
@@ -69,6 +459,23 @@
         </p>
       </fieldset>
     </form>
+
+    -------------------分割线-----------------------
+    <img src="http://static.tietuku.com/img/upbtn.png" alt="tietuku" style="cursor:pointer" onclick="tietuku_upload()" />
+    <script language="javascript" type="text/javascript" src="http://static.tietuku.com/static/open/tietuku.jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="http://static.tietuku.com/static/open/tietuku.dialog.js?1"></script>
+    <script>
+      var jq = jQuery.noConflict();
+
+      function tietuku_upload() {
+        jq.dialog.showIframeDialog(850, '',
+          '<iframe frameborder="0" width="824" height="460" marginheight="0" marginwidth="0"  src="http://static.tietuku.com/upByPlugn?token=3e42187b7adc1dea2ba2f96c5f41b5d8ae302f6c:rXTLNRd7jrPJpAVqSTAY_-D5psg=:eyJkZWFkbGluZSI6MTUzMDg2ODUzNiwiYWN0aW9uIjoiZ2V0IiwidWlkIjoiNjExMzQxIiwiYWlkIjoiMTQ0NjQ4MCIsImZyb20iOiJmaWxlIn0=&ifr=1&"></iframe>'
+        );
+      }
+      var $ = jQuery.noConflict();
+    </script>
+    -------------------分割线-----------------------
+
 
     <h2>Using the POST method</h2>
     <h3>Enctype: application/x-www-form-urlencoded (default)</h3>
@@ -113,6 +520,19 @@
     <form action="http://localhost:10007/service/upload/imgUpload" method="post" enctype="multipart/form-data" onsubmit="AJAXSubmit(this); return false;">
       <fieldset>
         <legend>Upload example</legend>
+
+        <select name="image_type">
+          <option>利益1</option>
+          <option>tema1</option>
+          <option>Protect</option>
+          <option>Protect2</option>
+          <option>Protect3</option>
+          <option>Protect4</option>
+          <option>Protect5</option>
+          <option>Protect6</option>
+          <option>Protect7</option>
+          <option>Protect8</option>
+        </select>
 
         <p>
           Post your photos:
@@ -315,7 +735,7 @@
                 /* enctype is multipart/form-data */
                 for (nFile = 0; nFile < oField.files.length; nFile++) {
                   oFile = oField.files[nFile];
-                  console.log(oFile, 'oFile'); // File
+                  console.log(oFile, 'oFile'); // File 
 
                   oSegmReq = new FileReader();
                   /* (custom properties:) */
@@ -324,10 +744,10 @@
                   /* (end of custom properties) */
                   oSegmReq.onload = pushSegment;
                   this.segments.push("Content-Disposition: form-data; name=\"" + oField.name + "\"; filename=\"" +
-                    oFile.name + "\"\r\nContent-Type: " + oFile.type + "\r\n\r\n");
+                    encodeURI(oFile.name) + "\"\r\nContent-Type: " + oFile.type + "\r\n\r\n"); //  encodeURI(oFile.name) 中文名转码
                   this.status++;
-                  oSegmReq.readAsArrayBuffer(oFile);
-                  // oSegmReq.readAsBinaryString(oFile);
+                  // oSegmReq.readAsArrayBuffer(oFile);
+                  oSegmReq.readAsBinaryString(oFile);
                   console.log(JSON.stringify(oSegmReq), 'osegmreq'); // FileReader
                 }
               } else {
@@ -360,7 +780,7 @@
 
       })();
     </script>
-    <div>
+    <!-- <div>
 
       "use strict"; if (!XMLHttpRequest.prototype.sendAsBinary) { XMLHttpRequest.prototype.sendAsBinary = function (sData) { var
       nBytes = sData.length, ui8Data = new Uint8Array(nBytes); for (var nIdx = 0; nIdx
@@ -385,7 +805,7 @@
         is now serialized. Submitting..."); */ submitData(oData); } function pushSegment(oFREvt) { console.log(oFREvt, 'ofrevt');
         this.owner.segments[this.segmentIdx] += oFREvt.target.result + "\r\n"; this.owner.status--; console.log("owner",
         this.owner); processStatus(this.owner); } function plainEscape(sText) { /* how should I treat a text/plain form encoding?
-        what characters are not allowed? this is what I suppose...: */ /* "4\3\7 - Einstein said E=mc2" ----> "4\\3\\7\ -\
+        what characters are not allowed? this is what I suppose...: */ /* "4\3\7 - Einstein said E=mc2" -- "4\\3\\7\ -\
         Einstein\ said\ E\=mc2" */ return sText.replace(/[\s\=\\]/g, "\\$&"); } function SubmitRequest(oTarget) { var nFile,
         sFieldType, oField, oSegmReq, oFile, bIsPost = oTarget.method.toLowerCase() === "post"; /* console.log("AJAXSubmit
         - Serializing form..."); */ // console.log(nFile, sFieldType, oField, oSegmReq, oFile, bIsPost); // bIsPost 确定是否为post请求
@@ -413,279 +833,11 @@
             { console.log(oFormElement.action); if (!oFormElement.action) { return; } new SubmitRequest(oFormElement); }; })();
             </div>
 
-    </div>
+    </div> -->
 
 
 </body>
-<script>
-  var val = document.getElementsByClassName('val')[0];
-  var result = document.getElementsByClassName('result')[0];
 
-  function upArticle() {
-    ajax({
-      url: "http://localhost:10007/api/article/addArticle", //请求地址
-      type: "POST", //请求方式
-      data: {
-        accessToken: '',
-        appID: '',
-        parameters: JSON.stringify({
-          "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9",
-          "articleID": "20180626493113",
-          "title": "走进四海138",
-          "subtitle": "",
-          "articleType": "公司介绍",
-          "authors": "四海日盛",
-          "linkURL": "",
-          "thumb": "http://www.xxx.com/xxx.png",
-          "keywords": "保洁 简介",
-          "description": "xxx-yyy",
-          "content": "xxx-xxx-...",
-          "orderNumber": 0,
-          "hitNumber": 0,
-          "publish": ""
-        }),
-        /*  parameters: JSON.stringify({
-           "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9",
-           "title": "走进四海",
-           "subtitle": "",
-           "articleType": "公司介绍",
-           "authors": "四海日盛",
-           "linkURL": "",
-           "thumb": "http:\/\/www.xxx.com/xxx.png",
-           "keywords": "保洁 简介",
-           "description": "xxx-yyy",
-           "content": "xxx-xxx-...",
-           "orderNumber": 0,
-           "hitNumber": 0,
-           "publish": new Date()
-         }), */
-        timezone: '8.0'
-      }, //请求参数
-      dataType: "json",
-      success: function (response, xml) {
-        // 此处放成功后执行的代码
-        var allData = JSON.parse(response)
-        // result.innerHTML = allData.data.allMobile
-        var o = allData;
-        console.log(o);
-      },
-      fail: function (status) {
-        // 此处放失败后执行的代码
-        console.log('错误', status);
-      }
-    });
-  }
-
-  function upData() {
-    ajax({
-      url: "http://localhost:10007/api/foundation/dataHandle", //请求地址
-      type: "POST", //请求方式
-      data: {
-        accessToken: '',
-        appID: '',
-        parameters: JSON.stringify({
-          "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9", // 管理员OpenID加密字符串 String 非空
-          "data": val.innerHTML
-        }),
-        timezone: '8.0'
-      }, //请求参数
-      dataType: "json",
-      success: function (response, xml) {
-        // 此处放成功后执行的代码
-        var allData = JSON.parse(response)
-        // result.innerHTML = allData.data.allMobile
-        var o = allData;
-        console.log(o);
-        let itemType = o.data.allMobile;
-        for (let item of itemType) {
-          switch (item.typeCode) {
-            case "A":
-
-              break;
-
-            case "B":
-
-              break;
-
-            case "C":
-
-              break;
-
-            case "D":
-
-              break;
-            case "E":
-
-              break;
-
-            case "F":
-
-              break;
-
-            default:
-              break;
-          }
-        }
-      },
-      fail: function (status) {
-        // 此处放失败后执行的代码
-        console.log('错误', status);
-      }
-    });
-  }
-
-  function like() {
-    ajax({
-      url: "http://localhost:10007/api/planning/like",
-      type: "post",
-      data: {
-        parameters: JSON.stringify({
-          start: {
-            tn: 1969,
-            ty: 4,
-            tr: 5,
-            // th,
-            // tm,
-            // ts,
-            // tms
-          },
-          cur: {
-            cn: 1970,
-            cy: 1,
-            cr: 10,
-            ch: 0,
-            cm: 0,
-            cs: 0,
-            cms: 0
-          }
-        })
-      },
-      dataType: 'json',
-      success: function (req) {
-        console.log(req);
-      },
-      fail: function (status) {
-        console.log(status);
-      }
-    })
-  }
-
-  function lotto() {
-    ajax({
-      url: "http://localhost:10007/api/foundation/lotto",
-      type: "POST",
-      data: {
-        parameters: JSON.stringify({
-          openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
-          param: '我是请求参数！！！'
-        })
-      },
-      dataType: 'json',
-      success: function (res, xml) {
-        console.log("res:", res);
-        // console.log("xml:", xml);
-      },
-      fail: function (status) {
-        console.error('请求错误', status);
-      }
-    })
-  }
-
-  function lottoRule() {
-    ajax({
-      url: "http://localhost:10007/api/foundation/lottoRule",
-      type: "POST",
-      data: {
-        parameters: JSON.stringify({
-          openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
-          rule: {
-            a: 3,
-            b: 8,
-            c: 2,
-            d: 7,
-            e: 10
-          }
-        })
-      },
-      dataType: 'json',
-      success: function (res, xml) {
-        console.log("res:", res);
-        // console.log("xml:", xml);
-      },
-      fail: function (status) {
-        console.error('请求错误', status);
-      }
-    })
-  }
-
-  function lottoQuery() {
-    ajax({
-      url: "http://localhost:10007/api/foundation/lottoQuery",
-      type: "POST",
-      data: {
-        parameters: JSON.stringify({
-          openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
-          param: '我是请求参数！！！'
-        })
-      },
-      dataType: 'json',
-      success: function (res, xml) {
-        console.log("res:", res);
-        // console.log("xml:", xml);
-      },
-      fail: function (status) {
-        console.error('请求错误', status);
-      }
-    })
-  }
-
-  function ajax(options) {
-    options = options || {};
-    options.type = (options.type || "GET").toUpperCase();
-    options.dataType = options.dataType || "json";
-    var params = formatParams(options.data);
-
-    //创建 - 非IE6 - 第一步
-    if (window.XMLHttpRequest) {
-      var xhr = new XMLHttpRequest();
-    } else { //IE6及其以下版本浏览器
-      var xhr = new ActiveXObject('Microsoft.XMLHTTP');
-    }
-
-    //接收 - 第三步
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4) {
-        var status = xhr.status;
-        if (status >= 200 && status < 300) {
-          options.success && options.success(xhr.responseText, xhr.responseXML);
-        } else {
-          options.fail && options.fail(status);
-        }
-      }
-    }
-
-    //连接 和 发送 - 第二步
-    if (options.type == "GET") {
-      xhr.open("GET", options.url + "?" + params, true);
-      xhr.send(null);
-    } else if (options.type == "POST") {
-      xhr.open("POST", options.url, true);
-      //设置表单提交时的内容类型
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.send(params);
-    }
-  }
-  //格式化参数
-  function formatParams(data) {
-    var arr = [];
-    for (var name in data) {
-      arr.push(encodeURIComponent(name) + "=" + encodeURIComponent(data[name]));
-    }
-    arr.push(("v=" + Math.random()).replace(".", ""));
-    console.log(arr.join("&"));
-    return arr.join("&");
-  }
-</script>
 <script>
   console.log(moment().weeks());
   var imgIpt = document.getElementById('img')
