@@ -2,7 +2,7 @@
 // Use of this source that is governed by a Apache-style
 // license that can be found in the LICENSE file.
 //
-// 定义跨设备服务器端接口 之 添加图片URL
+// 定义跨设备服务器端接口 之 添加图片列表URL
 //
 // 调用权限: API_PURVIEW_ADMINS <Passing/>
 //
@@ -35,14 +35,14 @@
 // @authors hjboss <hongjiangproject@gmail.com> 2018-01 $$
 import { request, response, IResult, render, utils, schema } from '../../foundation'
 
-export default async function addImg(req: request, res: response, parameters: any): Promise<IResult> {
-        console.log("parameters:", parameters)
+export default async function addImgList(req: request, res: response, parameters: any): Promise<IResult> {
+        console.log("parameters:", parameters);
         if (utils.empty(parameters.title)) {
-                return render({ code: 2019, msg: 'Invalid Parameters title' })
+                return render({ code: 2019, msg: 'Invalid Parameters' })
         }
 
-        let callback = await schema.imgs.saveImg(parameters)
-        console.log(callback)
+        let callback = await schema.imgList.saveImg(parameters)
+        console.log(callback);
         if (utils.empty(callback)) {
                 return render({ code: 2020, msg: 'Save Parameters Failth' })
         }
