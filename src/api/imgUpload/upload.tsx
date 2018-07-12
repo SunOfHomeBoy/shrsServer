@@ -22,42 +22,63 @@ import * as needle from 'needle'
 import * as express from 'express'
 import { IResult, render, utils } from '../../foundation'
 import { setting, outside } from '../../config'
+import { fn } from 'moment';
+import { WSAEWOULDBLOCK } from 'constants';
 
 export default async function upload(req: express.Request, res: express.Response, next: any): Promise<IResult> {
         res.setHeader('Access-Control-Allow-Origin', '*')
         res.setHeader('Access-Control-Allow-Methods', 'POST')
         res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
-
-        // console.log(Object(req).body);
+        console.log("req：：", Object(req));
 
         switch (req.method.toUpperCase()) {
                 case 'OPTIONS':
                         return render({ code: 201, msg: '' })
 
                 case 'POST':
-                        return new Promise<any>(resolve => {
-                                let fh: any = Object(req).files['photos']
-                                // return resolve({code:200,msg:'SB'})
+                        let fh: any = Object(req).files['photos']
+                        if (fh instanceof Array) {
+                                return render({code:2019, msg:"no Array"})
+                                let cdns = []
+                                for (let i = 0; i < fh.length; i++) {
+                                        let cdn = await fileCDN(fh[i])
+                                        cdns.push(cdn.data)
 
-                                console.log('Object(req)::', Object(req).files['photos']);
+                                        if (!utils.empty(cdns)) {
+                                                fs.unlink(fh[i].path, err => { console.log(err, '删除') })
+                                        }
+                                }
+                                return render({ code: 200, msg: 'array', data: cdns })
+                        } else {
+                                let cdn = await fileCDN(fh)
+                                if (!utils.empty(cdn) && cdn.data) {
+                                        fs.unlink(fh.path, err => { console.log(err, '删除') })
+                                }
+                                return render({ code: 200, msg: 'obj', data: cdn.data })
+                        }
+        }
 
-                                // fs.readFile(fh.path, (err: Error, buffers: any) => { console.log(buffers); })
-                                fs.readFile(fh.path, (err: Error, buffers: any) => {
-                                        let targetName = new Buffer(utils.md5(String(buffers))).toString('base64').replace(/=/, '')
-                                        let targetSuff = fh.name.split('.')[1]
-                                        let targetFile = `${targetName}.${targetSuff}`
-                                        let targetDist = path.join(setting.pathPublic, utils.formatDate('YYYYMM'), targetFile)
-                                        let targetPath = path.dirname(targetDist)
+        return render({ code: 200, msg: 'fail to upload' })
 
-                                        fs.existsSync(setting.pathPublic) || fs.mkdirSync(setting.pathPublic)
-                                        fs.existsSync(targetPath) || fs.mkdirSync(targetPath)
+        async function fileCDN(fh): Promise<any> {
+                return new Promise<any>(resolve => {
+                        fs.readFile(fh.path, (err: Error, buffers: any) => {
+                                console.log("decodeFhUri::", decodeURI(fh.name))
+                                let targetName = new Buffer(utils.md5(String(buffers))).toString('base64').replace(/=/, '')
+                                let targetSuff = fh.name.split('.')[1] // 后缀
+                                let targetFile = `${targetName}.${targetSuff}` // 文件名
+                                let targetDist = path.join(setting.pathPublic, utils.formatDate('YYYYMM'), targetFile) // 文件绝对路径
+                                let targetPath = path.dirname(targetDist) // 目录绝对路径
 
-                                        fs.writeFile(targetDist, buffers, (err: Error) => {
-                                                if (err) {
-                                                        return resolve({ code: 200, msg: err.message })
-                                                }
+                                fs.existsSync(setting.pathPublic) || fs.mkdirSync(setting.pathPublic)
+                                fs.existsSync(targetPath) || fs.mkdirSync(targetPath)
 
-                                                needle.post('http://up.imgapi.com/', {
+                                fs.writeFile(targetDist, buffers, (err: Error) => {
+                                        if (err) { return resolve({ code: 201, msg: err.message }) }
+
+                                        needle.post(
+                                                'http://up.imgapi.com/',
+                                                {
                                                         file: {
                                                                 file: targetDist,
                                                                 content_type: fh.headers['content-type']
@@ -67,22 +88,21 @@ export default async function upload(req: express.Request, res: express.Response
                                                         deadline: Math.floor(Date.now() / 1000) + 60,
                                                         from: 'file',
                                                         httptype: 1
-                                                }, { multipart: true }, (err: Error, callback: any) => {
+                                                },
+                                                { multipart: true },
+                                                (err: Error, callback: any) => {
                                                         if (err) {
-                                                                return resolve({ code: 200, msg: err.message })
+                                                                return resolve({ code: 202, msg: err.message })
                                                         }
-
                                                         let result = utils.jsonDecode(callback.body || '')
                                                         if (err) {
-                                                                return resolve({ code: 200, msg: result.info })
+                                                                return resolve({ code: 203, msg: result.info })
                                                         }
-
-                                                        return resolve({ uri: result.linkurl, name: targetFile })
-                                                })
-                                        })
+                                                        return resolve({ code: 200, msg: 'success', data: { uri: result, name: targetFile } })
+                                                }
+                                        )
                                 })
                         })
+                })
         }
-
-        return render({ code: 200, msg: '' })
 }
