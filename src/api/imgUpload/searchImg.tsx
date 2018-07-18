@@ -8,11 +8,11 @@
 //
 // 参数说明:
 //      {
-//              "Publish": 0, // 发布时间 Number 可空 其中：0表示全部 1表示今天发布 3表示最近三天 7表示最近七天 15表示最近半月 30表示最近一月
-//              "imgMode": 1 || 2, // 图片模型 可空 默认值：1 其中：1表示荣誉证书 2表示团队风采
+//              "imgMode": 1 || 2, // 图片模型 非空/重要 默认值：1 其中：1表示荣誉证书 2表示团队风采
 //              "imgItem": "imgItemName", // 图片模型下子类型 可空 默认值：空字符串
+//              "Publish": 0, // 发布时间 Number 可空 其中：0表示全部 1表示今天发布 3表示最近三天 7表示最近七天 15表示最近半月 30表示最近一月
 //              "begin": 1, // 分页页码 Number 可空 默认值：1
-//              "limit": 10, // 每页极限 Number 可空 默认值：10
+//              "limit": 30, // 每页极限 Number 可空 默认值：30
 //      }
 //
 // 返回数据:
@@ -23,7 +23,7 @@
 //                      "total": 51, // 数据总数 Number 非空
 //                      "pages": 6,  // 分页总数 Number 非空
 //                      "begin": 1,  // 分页页码 Number 非空
-//                      "limit": 10, // 每页极限 Number 非空
+//                      "limit": 30, // 每页极限 Number 非空
 //                      "items": [{
 //                              "ImgID": "20171102759933", // 文章全局ID String 非空
 //                              "ImgType": "xxx", // 文章分类 String 非空
@@ -41,7 +41,7 @@ import { request, response, IResult, render, utils, schema } from '../../foundat
 export default async function searchImg(req: request, res: response, parameters: any): Promise<IResult> {
         let filter: any = {
                 where: {
-                        imgMode: parameters.imgMode || 1,
+                        imgMode: parameters.imgMode || 2,
                         imgItem: parameters.imgItem || '',
                         enable: true
                 },
@@ -57,14 +57,17 @@ export default async function searchImg(req: request, res: response, parameters:
                         $gt: utils.beforeToday(parameters.imgPublish)
                 }
         }
-
+        console.log("filter:::", filter);
         let document = await schema.imgs.findPage(filter)
+        console.log(document);
         document.items = utils.forEach(document.items, (e: any): any => {
+                console.log("document.items:::", e);
                 return {
-                        articleID: e.articleID,
-                        articleType: e.articleType,
+                        imgID: e.imgID,
+                        imgMode: e.imgMode,
+                        imgItem: e.imgItem,
                         title: e.title,
-                        thumb: e.thumb,
+                        linkURL: e.linkURL,
                         publish: utils.formatDate('YYYY-MM-DD', e.publish),
                         description: e.description
                 }

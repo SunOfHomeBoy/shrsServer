@@ -83,8 +83,10 @@ export default class serve {
                 fs.existsSync(setting.pathTmpdir) || fs.mkdirSync(setting.pathTmpdir)
                 fs.existsSync(logdir) || fs.mkdirSync(logdir)
                 if (process.env.NODE_ENV !== 'production') {
+                        console.log("use combined");
                         app.use(morgan('combined'))
                 } else {
+                        console.log("use log");
                         let options = {
                                 stream: fileStreamRotator.getStream({
                                         date_format: 'YYYYMMDD',
@@ -105,6 +107,7 @@ export default class serve {
                 }
 
                 app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
+                        // console.log("12333333333333333333333333");
                         upload(req, res, next).then((callback) => {
                                 console.log(callback)
                                 res.setHeader('Access-Control-Allow-Origin', '*')

@@ -51,7 +51,7 @@ function searchArticle(req, res, parameters) {
                             articleID: -1
                         },
                         begin: parameters.begin || 1,
-                        limit: parameters.limit || 10
+                        limit: parameters.limit || 30
                     };
                     if (parameters.articleType) {
                         filter.where.articleType = parameters.articleType;

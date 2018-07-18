@@ -8,9 +8,9 @@
 //
 // 参数说明:
 //      {
-//              "articleLang": "cn", // 语言版本 String 非空 其中：cn表示简体中文 zh表示繁体中文 en表示英语
+//              "articleLang": "cn", // 语言版本 String 可空 其中：默认cn表示简体中文 zh表示繁体中文 en表示英语
 //              "articlePublish": 0, // 发布时间 Number 可空 其中：0表示全部 1表示今天发布 3表示最近三天 7表示最近七天 15表示最近半月 30表示最近一月
-//              "articleType": "xxx", // 文章分类 String 可空
+//              "articleType": "xxx", // 文章分类 String 非空
 //              "begin": 1, // 分页页码 Number 可空 默认值：1
 //              "limit": 10, // 每页极限 Number 可空 默认值：10
 //      }

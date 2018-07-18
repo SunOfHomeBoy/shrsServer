@@ -17,7 +17,7 @@ class schemaArticle extends schema {
                                 _id: String,
                                 openID: String,      // 管理员OpenID字符串 非空 默认值：空字符串
                                 articleID: String,   // 文章全局ID 非空 索引 默认值：空字符串 算法：（ gmmktime() - 1505620805 ) % 1000000
-                                articleMode: Number, //文章模型 可空 默认值：0 其中：1表示新闻型文章 2表示页面型文章
+                                articleMode: Number, // 文章模型 可空 默认值：0 其中：1表示新闻型文章 2表示页面型文章
                                 articleMark: String, // 页面型文章标识符 可空 默认值：空字符串
                                 articleLang: String, // 文章语言版本 可空 默认值：cn 即简体中文
                                 articleType: String, // 新闻型文章类型 可空 默认值：空字符串

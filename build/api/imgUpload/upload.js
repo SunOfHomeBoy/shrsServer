@@ -42,19 +42,12 @@ var foundation_1 = require("../../foundation");
 var config_1 = require("../../config");
 function upload(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Methods', 'POST');
-            res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
-            switch (req.method.toUpperCase()) {
-                case 'OPTIONS':
-                    return [2, foundation_1.render({ code: 201, msg: '' })];
-                case 'POST':
+        function fileCDN(fh) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
                     return [2, new Promise(function (resolve) {
-                            var fh = Object(req).files['photos'];
-                            return resolve({ code: 200, msg: 'SB' });
-                            console.log('Object(req)::', Object(req).files['photos']);
                             fs.readFile(fh.path, function (err, buffers) {
+                                console.log("decodeFhUri::", decodeURI(fh.name));
                                 var targetName = new Buffer(foundation_1.utils.md5(String(buffers))).toString('base64').replace(/=/, '');
                                 var targetSuff = fh.name.split('.')[1];
                                 var targetFile = targetName + "." + targetSuff;
@@ -64,7 +57,7 @@ function upload(req, res, next) {
                                 fs.existsSync(targetPath) || fs.mkdirSync(targetPath);
                                 fs.writeFile(targetDist, buffers, function (err) {
                                     if (err) {
-                                        return resolve({ code: 200, msg: err.message });
+                                        return resolve({ code: 201, msg: err.message });
                                     }
                                     needle.post('http://up.imgapi.com/', {
                                         file: {
@@ -78,19 +71,62 @@ function upload(req, res, next) {
                                         httptype: 1
                                     }, { multipart: true }, function (err, callback) {
                                         if (err) {
-                                            return resolve({ code: 200, msg: err.message });
+                                            return resolve({ code: 202, msg: err.message });
                                         }
                                         var result = foundation_1.utils.jsonDecode(callback.body || '');
                                         if (err) {
-                                            return resolve({ code: 200, msg: result.info });
+                                            return resolve({ code: 203, msg: result.info });
                                         }
-                                        return resolve({ uri: result.linkurl, name: targetFile });
+                                        return resolve({ code: 200, msg: 'success', data: { uri: result, name: targetFile } });
                                     });
                                 });
                             });
                         })];
+                });
+            });
+        }
+        var _a, fh, cdns, i, cdn, cdn;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader('Access-Control-Allow-Methods', 'POST');
+                    res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
+                    console.log("req：：", Object(req));
+                    _a = req.method.toUpperCase();
+                    switch (_a) {
+                        case 'OPTIONS': return [3, 1];
+                        case 'POST': return [3, 2];
+                    }
+                    return [3, 9];
+                case 1: return [2, foundation_1.render({ code: 201, msg: '' })];
+                case 2:
+                    fh = Object(req).files['photos'];
+                    if (!(fh instanceof Array)) return [3, 7];
+                    return [2, foundation_1.render({ code: 2019, msg: "no Array" })];
+                case 3:
+                    if (!(i < fh.length)) return [3, 6];
+                    return [4, fileCDN(fh[i])];
+                case 4:
+                    cdn = _b.sent();
+                    cdns.push(cdn.data);
+                    if (!foundation_1.utils.empty(cdns)) {
+                        fs.unlink(fh[i].path, function (err) { console.log(err, '删除'); });
+                    }
+                    _b.label = 5;
+                case 5:
+                    i++;
+                    return [3, 3];
+                case 6: return [2, foundation_1.render({ code: 200, msg: 'array', data: cdns })];
+                case 7: return [4, fileCDN(fh)];
+                case 8:
+                    cdn = _b.sent();
+                    if (!foundation_1.utils.empty(cdn) && cdn.data) {
+                        fs.unlink(fh.path, function (err) { console.log(err, '删除'); });
+                    }
+                    return [2, foundation_1.render({ code: 200, msg: 'obj', data: cdn.data })];
+                case 9: return [2, foundation_1.render({ code: 200, msg: 'fail to upload' })];
             }
-            return [2, foundation_1.render({ code: 200, msg: '' })];
         });
     });
 }

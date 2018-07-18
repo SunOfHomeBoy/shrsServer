@@ -67,9 +67,11 @@ var serve = (function () {
         fs.existsSync(setting_1["default"].pathTmpdir) || fs.mkdirSync(setting_1["default"].pathTmpdir);
         fs.existsSync(logdir) || fs.mkdirSync(logdir);
         if (process.env.NODE_ENV !== 'production') {
+            console.log("use combined");
             app.use(morgan('combined'));
         }
         else {
+            console.log("use log");
             var options = {
                 stream: fileStreamRotator.getStream({
                     date_format: 'YYYYMMDD',
@@ -87,6 +89,7 @@ var serve = (function () {
             });
         }
         app.use('/service/upload/imgUpload', multiparty(), function (req, res, next) {
+            console.log("12333333333333333333333333");
             upload_1["default"](req, res, next).then(function (callback) {
                 console.log(callback);
                 res.setHeader('Access-Control-Allow-Origin', '*');
