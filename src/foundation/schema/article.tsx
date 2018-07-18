@@ -75,7 +75,7 @@ class schemaArticle extends schema {
         public async saveArticle(parameters: any): Promise<boolean> {
                 parameters.articleID = parameters.articleID || utils.NewArticleID()
                 parameters.articleLang = parameters.articleLang || 'cn'
-                parameters.articleMode = 1
+                parameters.articleMode = parameters.articleMode || 2
                 parameters._id = [
                         parameters.articleMode,
                         parameters.articleID,

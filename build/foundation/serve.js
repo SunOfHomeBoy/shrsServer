@@ -89,12 +89,8 @@ var serve = (function () {
             });
         }
         app.use('/service/upload/imgUpload', multiparty(), function (req, res, next) {
-            console.log("12333333333333333333333333");
             upload_1["default"](req, res, next).then(function (callback) {
                 console.log(callback);
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader('Access-Control-Allow-Methods', 'POST');
-                res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
                 res.header('charset', 'utf8');
                 res.header('Content-Type', 'application/json');
                 res.status(callback.code < 1000 ? callback.code : 200).end(JSON.stringify(callback));

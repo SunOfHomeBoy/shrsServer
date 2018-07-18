@@ -107,12 +107,11 @@ export default class serve {
                 }
 
                 app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
-                        // console.log("12333333333333333333333333");
                         upload(req, res, next).then((callback) => {
                                 console.log(callback)
-                                res.setHeader('Access-Control-Allow-Origin', '*')
-                                res.setHeader('Access-Control-Allow-Methods', 'POST')
-                                res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
+                                // res.setHeader('Access-Control-Allow-Origin', '*')
+                                // res.setHeader('Access-Control-Allow-Methods', 'POST')
+                                // res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
 
                                 // res.renderJSON(callback)
 
