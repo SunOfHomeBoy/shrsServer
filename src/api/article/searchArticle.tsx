@@ -55,6 +55,10 @@ export default async function searchArticle(req: request, res: response, paramet
                 filter.where.articleType = parameters.articleType
         }
 
+        if (parameters.articleMode) {
+                filter.where.articleMode = parameters.articleMode
+        }
+
         if (parameters.articlePublish) {
                 filter.where.publish = {
                         $gt: utils.beforeToday(parameters.articlePublish)
