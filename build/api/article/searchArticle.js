@@ -56,6 +56,9 @@ function searchArticle(req, res, parameters) {
                     if (parameters.articleType) {
                         filter.where.articleType = parameters.articleType;
                     }
+                    if (parameters.articleMode) {
+                        filter.where.articleMode = parameters.articleMode;
+                    }
                     if (parameters.articlePublish) {
                         filter.where.publish = {
                             $gt: foundation_1.utils.beforeToday(parameters.articlePublish)
@@ -67,6 +70,7 @@ function searchArticle(req, res, parameters) {
                     document.items = foundation_1.utils.forEach(document.items, function (e) {
                         return {
                             articleID: e.articleID,
+                            articleMode: e.articleMode,
                             articleType: e.articleType,
                             title: e.title,
                             thumb: e.thumb,

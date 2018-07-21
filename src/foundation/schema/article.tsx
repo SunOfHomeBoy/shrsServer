@@ -79,7 +79,7 @@ class schemaArticle extends schema {
                 parameters._id = [
                         parameters.articleMode,
                         parameters.articleID,
-                        parameters.articleLang
+                        parameters.articleLang || 'cn'
                 ].join('#')
 
                 return this.saveSafe(parameters)

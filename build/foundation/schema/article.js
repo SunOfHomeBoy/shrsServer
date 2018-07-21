@@ -59,7 +59,7 @@ var schemaArticle = (function (_super) {
                 _id: String,
                 openID: String,
                 articleID: String,
-                articleMode: Number,
+                articleMode: String,
                 articleMark: String,
                 articleLang: String,
                 articleType: String,
@@ -93,11 +93,11 @@ var schemaArticle = (function (_super) {
                         document.articleID = parameters.articleID || document.articleID || '';
                         document.articleMode = parameters.articleMode || document.articleMode || '';
                         document.articleMark = parameters.articleMark || document.articleMark || '';
-                        document.articleLang = parameters.articleLang || document.articleLang || '';
+                        document.articleLang = parameters.articleLang || document.articleLang || 'cn';
                         document.articleType = parameters.articleType || document.articleType || '';
                         document.title = parameters.title || document.title || '';
                         document.subtitle = parameters.subtitle || document.subtitle || '';
-                        document.authors = parameters.authors || document.authors || '';
+                        document.authors = parameters.authors || document.authors || '四海日盛';
                         document.linkURL = parameters.linkURL || document.linkURL || '';
                         document.thumb = parameters.thumb || document.thumb || '';
                         document.keywords = parameters.keywords || document.keywords || '';
@@ -121,12 +121,11 @@ var schemaArticle = (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 parameters.articleID = parameters.articleID || utils_1["default"].NewArticleID();
-                parameters.articleLang = parameters.articleLang || 'cn';
-                parameters.articleMode = 1;
+                parameters.articleMode = parameters.articleMode || '';
                 parameters._id = [
                     parameters.articleMode,
                     parameters.articleID,
-                    parameters.articleLang
+                    parameters.articleLang || 'cn'
                 ].join('#');
                 return [2, this.saveSafe(parameters)];
             });
@@ -136,8 +135,7 @@ var schemaArticle = (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 parameters.articleMark = String(parameters.articleMark || 'DEFAULT').toUpperCase();
-                parameters.articleLang = parameters.articleLang || 'cn';
-                parameters.articleMode = 2;
+                parameters.articleMode = parameters.articleMode || '';
                 parameters._id = [
                     parameters.articleMode,
                     parameters.articleMark,

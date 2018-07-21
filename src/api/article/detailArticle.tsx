@@ -44,14 +44,14 @@ import { request, response, IResult, render, utils, schema, log } from '../../fo
 
 export default async function detailArticle(req: request, res: response, parameters: any): Promise<IResult> {
         let articleLang = parameters.articleLang || 'cn'
-        console.log(articleLang);
-        let callback = await schema.article.findById(`1#${parameters.articleID}#${articleLang}`)
+
+        let callback = await schema.article.findById(`${parameters.articleID}#${articleLang}`)
 
 
         if (utils.empty(callback)) {
                 return render({ code: 2019, msg: 'Invalid Parameters' })
         }
-
+        console.log(callback);
         await log.article(req, parameters.articleID)
         return render({
                 code: 200, msg: '', data: {
@@ -59,6 +59,7 @@ export default async function detailArticle(req: request, res: response, paramet
                         articleLang: callback.articleLang || 'cn',
                         title: callback.title || '',
                         subtitle: callback.subtitle || '',
+                        articleMode: callback.articleMode || '',
                         articleType: callback.articleType || '',
                         authors: callback.authors || '',
                         linkURL: callback.linkURL || '',

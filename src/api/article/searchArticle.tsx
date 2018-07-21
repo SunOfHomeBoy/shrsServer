@@ -10,6 +10,7 @@
 //      {
 //              "articleLang": "cn", // 语言版本 String 可空 其中：默认cn表示简体中文 zh表示繁体中文 en表示英语
 //              "articlePublish": 0, // 发布时间 Number 可空 其中：0表示全部 1表示今天发布 3表示最近三天 7表示最近七天 15表示最近半月 30表示最近一月
+//              "articleMode": "xxx", // 文章模式 String 非空
 //              "articleType": "xxx", // 文章分类 String 非空
 //              "begin": 1, // 分页页码 Number 可空 默认值：1
 //              "limit": 10, // 每页极限 Number 可空 默认值：10
@@ -69,6 +70,7 @@ export default async function searchArticle(req: request, res: response, paramet
         document.items = utils.forEach(document.items, (e: any): any => {
                 return {
                         articleID: e.articleID,
+                        articleMode: e.articleMode,
                         articleType: e.articleType,
                         title: e.title,
                         thumb: e.thumb,
