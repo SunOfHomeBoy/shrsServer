@@ -9,7 +9,7 @@
 // 参数说明:
 //      {
 //              "imgID": "20171102759933", // 文章全局ID String 非空
-//              "enable": false // 文章状态 Boolean 非空 默认值：false 其中：TRUE表示恢复 FALSE表示删除
+//              "enable": false // 文章状态 Boolean 可空 默认值：false 其中：TRUE表示恢复 FALSE表示删除
 //      }
 //
 // 返回数据:
@@ -22,7 +22,10 @@
 import { request, response, IResult, render, utils, schema } from '../../foundation'
 
 export default async function delImg(req: request, res: response, parameters: any): Promise<IResult> {
-        let callback = await schema.imgList.update({ ImgID: parameters.ImgID }, { enable: parameters.enable || false })
+        let callback = await schema.imgList.update(
+                { ImgID: parameters.ImgID },
+                { enable: parameters.enable || false }
+        )
 
         console.log(callback);
 

@@ -77,7 +77,6 @@ class schemaArticle extends schema {
                 // parameters.articleLang = parameters.articleLang || 'cn'
                 parameters.articleMode = parameters.articleMode || ''
                 parameters._id = [
-                        parameters.articleMode,
                         parameters.articleID,
                         parameters.articleLang || 'cn'
                 ].join('#')

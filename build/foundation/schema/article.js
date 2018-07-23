@@ -123,7 +123,6 @@ var schemaArticle = (function (_super) {
                 parameters.articleID = parameters.articleID || utils_1["default"].NewArticleID();
                 parameters.articleMode = parameters.articleMode || '';
                 parameters._id = [
-                    parameters.articleMode,
                     parameters.articleID,
                     parameters.articleLang || 'cn'
                 ].join('#');

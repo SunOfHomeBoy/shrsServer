@@ -40,7 +40,6 @@ import { request, response, IResult, render, utils, schema } from '../../foundat
 export default async function searchImgList(req: request, res: response, parameters: any): Promise<IResult> {
         let filter: any = {
                 where: {
-                        imgMode: parameters.imgMode || 1,
                         enable: true
                 },
                 order: {
@@ -50,9 +49,8 @@ export default async function searchImgList(req: request, res: response, paramet
                 limit: parameters.limit || 30
         }
 
-        // if (parameters.imgMode) {
-        //         filter.where.imgMode = parameters.imgMode
-        // }
+        if (parameters.imgMode) filter.where.imgMode = parameters.imgMode
+        
 
         if (parameters.Publish) {
                 filter.where.publish = {
@@ -65,8 +63,9 @@ export default async function searchImgList(req: request, res: response, paramet
                 return {
                         imgID: e.imgID,
                         imgMode: e.imgMode,
+                        imgItem: e.imgItem,
                         title: e.title,
-                        thumb: e.thumb,
+                        linkURL: e.linkURL,
                         publish: utils.formatDate('YYYY-MM-DD', e.publish),
                         description: e.description
                 }
