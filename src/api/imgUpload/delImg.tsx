@@ -23,7 +23,7 @@ import { request, response, IResult, render, utils, schema } from '../../foundat
 
 export default async function delImg(req: request, res: response, parameters: any): Promise<IResult> {
         let callback = await schema.imgs.update(
-                { ImgID: parameters.ImgID },
+                { imgID: parameters.imgID },
                 { enable: parameters.enable || false }
         )
 
