@@ -9,9 +9,9 @@
 // 参数说明:
 //      {
 //              "openID": String,         // 管理员OpenID字符串 非空 默认值：空字符串
-//              "imgID": String,          // 图片全局ID 非空 索引 默认值：空字符串 算法：（ gmmktime() - 1505620805 ) % 1000000
-//              "imgMode": Number,        // 图片模型 可空 默认值：0 其中：1表示荣誉证书 2表示团队风采
-//              "imgItem": String,        // 图片模型下子类型 可空 默认值：空字符串
+//              "imgID": String,          // 图片全局ID 可空 索引 默认值：空字符串 算法：( gmmktime() - 1505620805 ) % 1000000
+//              "imgMode": Number,        // 图片模型 非空 默认值：0 其中：1表示荣誉证书 2表示团队风采
+//              "imgItem": String,        // 图片模型下子类型 非空空 默认值：空字符串
 //              "title": String,          // 图片主标题 非空 默认值：空字符串
 //              "linkURL": String,        // 图片URL 非空 默认值：空字符串
 //              "authors": String,        // 图片作者 可空 默认值：空字符串

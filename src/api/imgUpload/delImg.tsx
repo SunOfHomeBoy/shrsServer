@@ -22,7 +22,7 @@
 import { request, response, IResult, render, utils, schema } from '../../foundation'
 
 export default async function delImg(req: request, res: response, parameters: any): Promise<IResult> {
-        let callback = await schema.imgList.update(
+        let callback = await schema.imgs.update(
                 { ImgID: parameters.ImgID },
                 { enable: parameters.enable || false }
         )
