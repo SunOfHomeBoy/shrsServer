@@ -76,11 +76,39 @@
       <input type="file" name="imgUpload" id="img">
       <input type="submit">
     </form>
+    
+    <button onclick="xhrClick()">xhr显示</button>
 
     <script>
       var val = document.getElementsByClassName('val')[0];
       var result = document.getElementsByClassName('result')[0];
 
+      function xhrClick() {
+        ajax({
+          url: "http://localhost:10007/api/signin",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              imgMode: 1,
+              imgItem: "荣誉证书", // 图片模型下子类型 可空 默认值：空字符串
+              title: "医院消毒清洁资质证书", // 图片主标题 非空 默认值：空字符串
+              linkURL: 'http://i1.fuimg.com/611341/635673d18b0ad969s.jpg',
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            console.log(response, xml);
+            // 此处放成功后执行的代码
+            // var allData = JSON.parse(response)
+
+            // console.log("allData::", allData, "\n", response);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
       function addImg() {
         ajax({
           url: "http://localhost:10007/api/imgs/addImg",
@@ -478,6 +506,7 @@
           if (xhr.readyState == 4) {
             var status = xhr.status;
             if (status >= 200 && status < 300) {
+              console.log("xhr callback", xhr);
               options.success && options.success(xhr.responseText, xhr.responseXML);
             } else {
               options.fail && options.fail(status);

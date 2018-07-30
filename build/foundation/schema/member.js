@@ -47,8 +47,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var schema_1 = require("./schema");
 var utils_1 = require("../utils");
-var config_1 = require("../../config");
-var vedio_1 = require("../vedio");
 var schemaMember = (function (_super) {
     __extends(schemaMember, _super);
     function schemaMember() {
@@ -60,103 +58,14 @@ var schemaMember = (function (_super) {
             schema: schema_1.newSchema({
                 _id: String,
                 openID: String,
-                mobile: String,
-                mobileArea: String,
                 password: String,
-                passwordCode: String,
-                passwordPay: String,
                 username: String,
-                realname: String,
-                img: String,
-                sex: Number,
-                phone: String,
-                workYears: Number,
-                education: Number,
-                bodyHeight: Number,
-                bodyWeight: Number,
-                nation: String,
-                marry: Number,
-                homepage: String,
-                contactTencent: String,
-                contactFacebook: String,
-                contactWechat: String,
-                contactQRCode: String,
-                address: String,
-                signature: String,
-                introduce: String,
-                birthdayYear: Number,
-                birthdayMonth: Number,
-                birthdayDay: Number,
-                localeCountry: String,
-                localeProvince: String,
-                localeCity: String,
-                localeTown: String,
-                homeCountry: String,
-                homeProvince: String,
-                homeCity: String,
-                homeTown: String,
-                email: String,
-                emailCode: String,
-                statusEmail: Boolean,
-                idcardNumber: String,
-                idcardSex: Number,
-                idcardAddress: String,
-                statusIDCard: Boolean,
-                rebate: String,
-                rebateStatus: Boolean,
-                money0: Number,
-                money1: Number,
-                money2: Number,
-                money3: Number,
-                money4: Number,
-                money5: Number,
-                money6: Number,
-                money7: Number,
-                money8: Number,
-                money9: Number,
-                score0: Number,
-                score1: Number,
-                score2: Number,
-                score3: Number,
-                score4: Number,
-                score5: Number,
-                score6: Number,
-                score7: Number,
-                score8: Number,
-                score9: Number,
-                role: Number,
-                grade: Number,
-                isEnterprise: Boolean,
-                signinTimes: Number,
-                signinDate: Date,
-                signinAll: Number,
-                bandAlipay: String,
-                bandWechat: String,
-                bandTencent: String,
-                bandWeibo: String,
-                bandFacebook: String,
-                bandTwitter: String,
-                bandGoogle: String,
-                bandWhatsApp: String,
-                bandVedio: Boolean,
-                registerFrom: String,
-                registerCode: String,
                 registerIP: String,
                 registerTime: Date,
                 signinIP: String,
                 signinTime: Date,
                 lastIP: String,
                 lastTime: Date,
-                backgroundImg: String,
-                deviceID: String,
-                location: {
-                    type: schema_1.Mixed,
-                    index: '2dsphere'
-                },
-                locationHome: {
-                    type: Array,
-                    index: '2dsphere'
-                },
                 enable: Boolean
             })
         };
@@ -183,64 +92,26 @@ var schemaMember = (function (_super) {
     };
     schemaMember.prototype.New = function (parameters) {
         return __awaiter(this, void 0, void 0, function () {
-            var document, _a, initBusiness, callback;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var document, callback;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        if (utils_1["default"].empty(parameters.mobile) || utils_1["default"].empty(parameters.password)) {
-                            return [2, new Promise(function (resolve) { return resolve(false); })];
-                        }
                         document = {
-                            openID: parameters.openID || utils_1["default"].NewOpenID(parameters.mobile),
-                            mobile: parameters.mobile,
-                            mobileArea: parameters.mobileArea || '86',
+                            openID: parameters.openID || utils_1["default"].NewOpenID(parameters.username),
                             password: utils_1["default"].cryptoPassword(parameters.password),
                             username: parameters.username || parameters.nickname || '',
-                            img: parameters.headerImg || '',
-                            sex: parameters.sex || 0,
-                            role: parameters.role || 0,
-                            rebate: parameters.rebate || '',
-                            isEnterprise: parameters.registerType === 'ENTERPRISE',
-                            bandWechat: parameters.wechatID || '',
-                            bandTencent: parameters.tencentID || '',
-                            registerFrom: parameters.registerFrom || 'PC',
                             registerIP: parameters.registerIP || '127.0.0.1',
                             registerTime: new Date(),
                             signinIP: parameters.signinIP || '127.0.0.1',
                             signinTime: new Date(),
                             lastIP: parameters.lastIP || '127.0.0.1',
                             lastTime: new Date(),
-                            backgroundImg: parameters.backgroundImg || '',
-                            deviceID: parameters.deviceID || '',
                             enable: true
                         };
                         document._id = document.openID;
-                        if (typeof (parameters.locationX) === 'number' && typeof (parameters.locationY) === 'number') {
-                            document.location = [parameters.locationX, parameters.locationY];
-                            document.registerFrom = 'MOBILE';
-                            if (document.bandTencent) {
-                                document.registerFrom = 'TENCENT';
-                            }
-                            else if (document.bandWechat) {
-                                document.registerFrom = 'WECHAT';
-                            }
-                        }
-                        if (typeof (parameters.locationHomeX) === 'number' && typeof (parameters.locationHomeY) === 'number') {
-                            document.locationHome = [parameters.locationHomeX, parameters.locationHomeY];
-                        }
-                        _a = document;
-                        return [4, vedio_1["default"].registerMember(document.openID)];
-                    case 1:
-                        _a.bandVedio = _b.sent();
-                        initBusiness = Object(config_1.business);
-                        document.money0 = initBusiness.initNum || 0;
-                        document.score0 = initBusiness.freeNum || 0;
-                        document.signinTimes = 1;
-                        document.signinDate = new Date();
-                        document.signinAll = 1;
                         return [4, this.save(document)];
-                    case 2:
-                        callback = _b.sent();
+                    case 1:
+                        callback = _a.sent();
                         if (utils_1["default"].empty(callback)) {
                             return [2, new Promise(function (resolve) { return resolve(false); })];
                         }

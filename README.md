@@ -36,3 +36,33 @@
   2.数据类型分
     文章、图片
 
+## 源码分析
+### request/response
+  因封装代理关系，调用原生接口，须加 `native` 字段。
+  ````
+  export default class response {
+    constructor(public native: express.Response) { }
+
+    // 服务器端 URI 跳转
+    public redirect(uri: string) {
+      this.native.redirect(uri, 301)
+    }
+  }
+
+  export default class request {
+    constructor(public native: express.Request) { }
+
+    // 返回给定名称的 GET 请求参数
+    public GET(name?: string, def?: any): any {
+      if (this.native.query) {
+        if (!name) {
+          return this.native.query
+        }
+
+        return this.native.query[name] || def
+      }
+
+      return null
+    }
+  }
+  ````  

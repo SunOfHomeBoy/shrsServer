@@ -38,6 +38,8 @@
       ||
       <button onclick="addImg()">增加图片</button>
     </div>
+
+    <button onclick="xhrClick()">xhr显示</button>
     <!-- 进度条 -->
     <progress id="progressBar" value="51" max="100">
       <div class="bugs">123123132</div>
@@ -49,9 +51,66 @@
       <input type="submit">
     </form>
 
+
+    <div>
+      <button onclick="singnup()">注册账号</button>
+    </div>
+
     <script>
       var val = document.getElementsByClassName('val')[0];
       var result = document.getElementsByClassName('result')[0];
+      
+      function singnup() {
+        ajax({
+          url: "http://192.168.0.191:10007/api/signup",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              "username": "四海日盛", // 企业用户管理员账号 String 可空 仅对registerType=enterprise有效
+              "password": "shrs88888", // 注册密码 String 非空
+              "confirm": "shrs88888", // 确认密码 String 非空
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            console.log(response, xml);
+            // 此处放成功后执行的代码
+            // var allData = JSON.parse(response)
+
+            // console.log("allData::", allData, "\n", response);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+      function xhrClick() {
+        ajax({
+          url: "http://192.168.0.191:10007/api/signin",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              imgMode: 1,
+              imgItem: "荣誉证书", // 图片模型下子类型 可空 默认值：空字符串
+              title: "医院消毒清洁资质证书", // 图片主标题 非空 默认值：空字符串
+              linkURL: 'http://i1.fuimg.com/611341/635673d18b0ad969s.jpg',
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            console.log(response, xml);
+            // 此处放成功后执行的代码
+            // var allData = JSON.parse(response)
+
+            // console.log("allData::", allData, "\n", response);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
 
       function searchImg() {
         console.log("search");
@@ -239,6 +298,7 @@
           if (xhr.readyState == 4) {
             var status = xhr.status;
             if (status >= 200 && status < 300) {
+              console.log("xhr callback", xhr);
               options.success && options.success(xhr.responseText, xhr.responseXML);
             } else {
               options.fail && options.fail(status);

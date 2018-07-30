@@ -33,11 +33,13 @@ import upload from '../api/imgUpload/upload';
 export default class serve {
         constructor(private configures: any) {
                 this.configures = configures || {}
-                this.configures.mappings = {} // 路由映射
+                this.configures.mappings = {}
 
                 for (let route of this.configures.routes) {
-                        this.configures.mappings[route.path] = route // 遍历路由配置列表 映射进表
+                        this.configures.mappings[route.path] = route
                 }
+                console.log(this.configures.mappings);
+                // console.log(request.path);
         }
 
         // 创建单实例的HTTP应用服务器
@@ -86,7 +88,7 @@ export default class serve {
                         cookie: {
                                 // domain: '192.168.0.191:8081',
                                 httpOnly: true,
-                                maxAge: 1800000
+                                maxAge: 60000
                         },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
                         resave: false,
                         saveUninitialized: true,
@@ -123,7 +125,7 @@ export default class serve {
                 app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
                         upload(req, res, next).then((callback) => {
                                 console.log(callback)
-                        
+                             
                                 res.header('charset', 'utf8')
                                 res.header('Content-Type', 'application/json')
                                 res.status(callback.code < 1000 ? callback.code : 200).end(JSON.stringify(callback))
@@ -141,7 +143,7 @@ export default class serve {
                         let parameters = utils.jsonDecode(requestData.REQUEST('parameters'))
                         let controller = configures.mappings[req.path]
 
-                        // console.log("controller::", controller);
+                        console.log("controller::", controller);
 
                         if (!controller || !controller.component) {
                                 return responseData.apiNotFound()
@@ -173,44 +175,44 @@ export default class serve {
                         }
 
                         // if (process.env.NODE_ENV !== 'development' && controller.auth) {
-                                if (!utils.inContains(appid, appID) || !token.valid(accessToken, controller.auth)) {
+                        //         if (!utils.inContains(appid, appID) || !token.valid(accessToken, controller.auth)) {
                         //                 return responseData.apiPermission()
-                                }
+                        //         }
                         // }
 
 
+                        // if (condition) {
+                                
+                        // }
 
                         console.log("session::", requestData.SESSION());
 
                      
-                        let url = requestData.getHeader("Origin");
-                        responseData.setHeader('Access-Control-Allow-Origin', url)
-                        responseData.setHeader('Access-Control-Allow-Methods', 'POST')
-                        responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
-                        responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
-
-
                         if (!requestData.SESSION().user && controller.auth > 1) {
-                                console.log(111111);
+                                console.log(111);
                                 res.clearCookie('user', {'max-age':0});
 
-                                res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
-
+                                res.setHeader('Set-Cookie', 'user=true;path=/;max-age=0;');
                                 // res.setHeader('Set-Cookie', 'isVisit=true;path=/;max-age=0;');
                                 // res.json({message: 'please signin'})
-
-                                // return responseData.apiPermission()
-                                responseData.renderJSON({code: 403, msg: 'do not have permission'})
+                                // return render()
+                                return responseData.errorPermission()
                         }
                         
+                        let url = requestData.getHeader("Origin");
+                        // console.log("OriginUrl::", url);
                         log.api(requestData)
                         controller.component(requestData, responseData, parameters).then((callback: IResult) => {
+                                responseData.setHeader('Access-Control-Allow-Origin', url)
+                                responseData.setHeader('Access-Control-Allow-Methods', 'POST')
+                                responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
+                                responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
                                 responseData.renderJSON(callback)
                         }, (err: Error) => {
                                 if (process.env.NODE_ENV !== 'production') {
                                         console.log(err)
                                 }
-                                console.log(err);
+
                                 responseData.apiInternalServer()
                         })
                 })

@@ -29,7 +29,7 @@ export default async function upload(req: express.Request, res: express.Response
         res.setHeader('Access-Control-Allow-Origin', '*')
         res.setHeader('Access-Control-Allow-Methods', 'POST')
         res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
-        console.log("req：：", Object(req));
+        // console.log("req：：", Object(req));
 
         switch (req.method.toUpperCase()) {
                 case 'OPTIONS':

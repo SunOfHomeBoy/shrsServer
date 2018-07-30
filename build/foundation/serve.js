@@ -4,6 +4,7 @@ var bodyParser = require("body-parser");
 var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var express = require("express");
+var session = require("express-session");
 var fileStreamRotator = require("file-stream-rotator");
 var fs = require("fs");
 var http = require("http");
@@ -63,6 +64,16 @@ var serve = (function () {
         app.use(bodyParser.json({ limit: '50mb' }));
         app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         app.use(cookieParser());
+        app.use(session({
+            secret: '12345',
+            name: 'shrsID',
+            cookie: {
+                httpOnly: true,
+                maxAge: 1800000
+            },
+            resave: false,
+            saveUninitialized: true
+        }));
         var logdir = path.join(setting_1["default"].pathTmpdir, configures.name || 'default');
         fs.existsSync(setting_1["default"].pathTmpdir) || fs.mkdirSync(setting_1["default"].pathTmpdir);
         fs.existsSync(logdir) || fs.mkdirSync(logdir);
@@ -127,21 +138,28 @@ var serve = (function () {
             if (controller.method !== 'GET' && utils_1["default"].empty(requestData.POST())) {
                 return responseData.apiPermission();
             }
-            if (process.env.NODE_ENV !== 'development' && controller.auth) {
-                if (!utils_1["default"].inContains(appid_1["default"], appID) || !token_1["default"].valid(accessToken, controller.auth)) {
-                    return responseData.apiPermission();
-                }
+            if (!utils_1["default"].inContains(appid_1["default"], appID) || !token_1["default"].valid(accessToken, controller.auth)) {
+            }
+            console.log("session::", requestData.SESSION());
+            var url = requestData.getHeader("Origin");
+            responseData.setHeader('Access-Control-Allow-Origin', url);
+            responseData.setHeader('Access-Control-Allow-Methods', 'POST');
+            responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
+            responseData.setHeader("Access-Control-ALLOW-Credentials", "true");
+            if (!requestData.SESSION().user && controller.auth > 1) {
+                console.log(111111);
+                res.clearCookie('user', { 'max-age': 0 });
+                res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
+                responseData.renderJSON({ code: 403, msg: 'do not have permission' });
             }
             log_1["default"].api(requestData);
             controller.component(requestData, responseData, parameters).then(function (callback) {
-                responseData.setHeader('Access-Control-Allow-Origin', '*');
-                responseData.setHeader('Access-Control-Allow-Methods', 'POST');
-                responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
                 responseData.renderJSON(callback);
             }, function (err) {
                 if (process.env.NODE_ENV !== 'production') {
                     console.log(err);
                 }
+                console.log(err);
                 responseData.apiInternalServer();
             });
         });
