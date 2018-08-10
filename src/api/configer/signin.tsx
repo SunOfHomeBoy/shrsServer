@@ -30,6 +30,7 @@ import { mobileArea } from '../../config'
 
 export default async function signin(req: request, res: response, parameters: any): Promise<IResult> {
         // first 查询 数据库 用户信息
+        let username = encodeURIComponent(parameters.user)
         let password = utils.cryptoPassword(parameters.password)
 
         let memberInfo = await schema.member.findOne(
@@ -44,7 +45,7 @@ export default async function signin(req: request, res: response, parameters: an
                         date: Date.now()
                 }
                 req.SESSION()["user"] = user
-                res.native.setHeader('Set-Cookie', `user=shrs;path=/;max-age=1600;`);
+                res.native.setHeader('Set-Cookie', `user=${username};path=/;max-age=1600;`);
                 return render({ code: 200, msg: '', data: memberInfo })
         }
 

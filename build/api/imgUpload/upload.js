@@ -92,7 +92,6 @@ function upload(req, res, next) {
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.setHeader('Access-Control-Allow-Methods', 'POST');
                     res.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
-                    console.log("req：：", Object(req));
                     _a = req.method.toUpperCase();
                     switch (_a) {
                         case 'OPTIONS': return [3, 1];

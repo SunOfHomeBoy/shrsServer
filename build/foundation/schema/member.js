@@ -97,7 +97,7 @@ var schemaMember = (function (_super) {
                 switch (_a.label) {
                     case 0:
                         document = {
-                            openID: parameters.openID || utils_1["default"].NewOpenID(parameters.username),
+                            openID: parameters.openID || utils_1["default"].NewOpenID(encodeURIComponent(parameters.user)),
                             password: utils_1["default"].cryptoPassword(parameters.password),
                             username: parameters.username || parameters.nickname || '',
                             registerIP: parameters.registerIP || '127.0.0.1',

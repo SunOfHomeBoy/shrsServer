@@ -15,10 +15,8 @@ var pm = require("pm");
 var log_1 = require("./log");
 var request_1 = require("./request");
 var response_1 = require("./response");
-var token_1 = require("./token");
 var utils_1 = require("./utils");
 var dev_1 = require("./dev");
-var appid_1 = require("../config/appid");
 var setting_1 = require("../config/setting");
 var upload_1 = require("../api/imgUpload/upload");
 var serve = (function () {
@@ -65,11 +63,10 @@ var serve = (function () {
         app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         app.use(cookieParser());
         app.use(session({
-            secret: '12345',
+            secret: 'shrs',
             name: 'shrsID',
             cookie: {
-                httpOnly: true,
-                maxAge: 1800000
+                httpOnly: true
             },
             resave: false,
             saveUninitialized: true
@@ -138,9 +135,6 @@ var serve = (function () {
             if (controller.method !== 'GET' && utils_1["default"].empty(requestData.POST())) {
                 return responseData.apiPermission();
             }
-            if (!utils_1["default"].inContains(appid_1["default"], appID) || !token_1["default"].valid(accessToken, controller.auth)) {
-            }
-            console.log("session::", requestData.SESSION());
             var url = requestData.getHeader("Origin");
             responseData.setHeader('Access-Control-Allow-Origin', url);
             responseData.setHeader('Access-Control-Allow-Methods', 'POST');
@@ -148,7 +142,6 @@ var serve = (function () {
             responseData.setHeader("Access-Control-ALLOW-Credentials", "true");
             if (!requestData.SESSION().user && controller.auth > 1) {
                 console.log(111111);
-                res.clearCookie('user', { 'max-age': 0 });
                 res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
                 responseData.renderJSON({ code: 403, msg: 'do not have permission' });
             }

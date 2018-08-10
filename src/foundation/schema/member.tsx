@@ -50,7 +50,7 @@ class schemaMember extends schema {
               
 
                 let document: any = {
-                        openID: parameters.openID || utils.NewOpenID(parameters.username),
+                        openID: parameters.openID || utils.NewOpenID(encodeURIComponent(parameters.user)),
                         password: utils.cryptoPassword(parameters.password),
                         username: parameters.username || parameters.nickname || '',
                         registerIP: parameters.registerIP || '127.0.0.1',

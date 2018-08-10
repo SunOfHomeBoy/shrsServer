@@ -81,12 +81,12 @@ export default class serve {
                 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
                 app.use(cookieParser())
                 app.use(session({
-                        secret: '12345',
+                        secret: 'shrs',
                         name: 'shrsID',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
                         cookie: {
                                 // domain: '192.168.0.191:8081',
                                 httpOnly: true,
-                                maxAge: 1800000
+                                // maxAge: 1800000
                         },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
                         resave: false,
                         saveUninitialized: true,
@@ -123,7 +123,6 @@ export default class serve {
                 app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
                         upload(req, res, next).then((callback) => {
                                 console.log(callback)
-                        
                                 res.header('charset', 'utf8')
                                 res.header('Content-Type', 'application/json')
                                 res.status(callback.code < 1000 ? callback.code : 200).end(JSON.stringify(callback))
@@ -172,16 +171,7 @@ export default class serve {
                                 return responseData.apiPermission()
                         }
 
-                        // if (process.env.NODE_ENV !== 'development' && controller.auth) {
-                                if (!utils.inContains(appid, appID) || !token.valid(accessToken, controller.auth)) {
-                        //                 return responseData.apiPermission()
-                                }
-                        // }
-
-
-
-                        console.log("session::", requestData.SESSION());
-
+                        // console.log("session::", requestData.SESSION());
                      
                         let url = requestData.getHeader("Origin");
                         responseData.setHeader('Access-Control-Allow-Origin', url)
@@ -189,20 +179,12 @@ export default class serve {
                         responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
                         responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
 
-
                         if (!requestData.SESSION().user && controller.auth > 1) {
                                 console.log(111111);
-                                res.clearCookie('user', {'max-age':0});
-
                                 res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
-
-                                // res.setHeader('Set-Cookie', 'isVisit=true;path=/;max-age=0;');
-                                // res.json({message: 'please signin'})
-
-                                // return responseData.apiPermission()
                                 responseData.renderJSON({code: 403, msg: 'do not have permission'})
                         }
-                        
+
                         log.api(requestData)
                         controller.component(requestData, responseData, parameters).then((callback: IResult) => {
                                 responseData.renderJSON(callback)
